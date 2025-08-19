@@ -1,0 +1,33 @@
+터미널 진입 -> mongosh 입력
+    mongosh 사용 상태로 들어옴.
+
+db 목록 보기
+    mongosh
+        show dbs
+
+    pymongo
+        from pymongo import MongoClient
+
+        client = MongoClient("localhost", 27017)
+        print(client.list_database_names())
+
+collection 목록 보기
+    mongosh
+        use <db_name>
+            = db를 선택해야 collection 목록을 볼 수 있다.
+        show collections
+
+    pymongo
+        db = client['<db_name>']
+        print(db.list_collection_names())
+
+
+echo "alias python=/usr/bin/python3" >> ~/.zshrc
+
+echo $SHELL
+    현재 사용하고 있는 쉘의 종류를 확인할 수 있다.
+
+fastapi 실행하기
+    uvicorn 파일명:FastAPI() --reload
+    uvicorn test_db_Fapi:app --reload
+

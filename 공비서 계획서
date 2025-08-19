@@ -1,0 +1,295 @@
+
+
+작업 기록
+    07/10
+        이날부터 프로그래밍 시작.
+        목표는 파이썬을 이용한 DB에 차량 넣고 검색해서 찾기.
+        파이선, 파이몽고, brew등을 설치했다.
+
+    07/11
+        코파일럿 설치
+        깃 영상 1편 시청
+        몽고db 실행해보기 (진행중)
+
+    07/14
+        몽고db CRUD 테스트 완료
+        넣을 데이터 정의 (진행중)
+
+    07/16?
+        스키마 초본 및 둘째안 완성
+        db 및 컬렉션 만들기
+        customers 테스트 데이터 작성
+        
+    07/23
+        스키마 검사 및 수정
+        스키마 검사 목록 추가
+        데이터 스키마 2가 최종본.
+
+    07/25
+        스키마 완성
+        fastapi 공부 시작
+        월요일에는 fastapi를 이용해 사이트 및 기능을 만들어보자.
+
+    07/28
+        fastapi 공부 조금 함
+        웹을 만들긴 했다.
+    
+    07/29
+        fastapi 공부 조금 더 함
+
+    07/30
+        db에 테스트 데이터 확인. 없으면 넣기. ✅
+        fastapi로 만든 웹에서 db에 접근해보기. 시도중
+        atlas 가입을 했다.
+        zshrc 수정방법을 배웠다.
+        가상환경 만드는 법과 가상환경에 대해 배웠다.
+        
+    08/18
+        github를 사용하고 싶은데 잘 안된다.
+
+오늘의 할일
+    db에 테스트 데이터 확인. 없으면 넣기. ✅
+    fastapi로 만든 웹에서 db에 접근해보기. 
+        버튼 2개를 만들어 데이터 가져오기 지우기 반복.
+
+
+
+
+    백엔드 먼저 완성하기.
+    테스트를 하고싶다면 스트림릿으로.
+    검색 기능 만들기. 동, 차종 등의 다양한 옵션으로 범위검색을 할 수 있게 하기.
+
+api 설명
+https://dev-dain.tistory.com/50
+
+
+해야할 일들
+    git으로 어디서든 내가 작업한 환경을 불러올 수 있도록 배워놓기.
+    스케쥴 관리를 통해 작업 진행도 및 계획 점검하기.
+
+
+    누가 무슨차량을 얼마나 닦았는지.
+    차량별 세차직원의 가격이 다르다.
+    어떻게 자동으로 금액이 설정되도록 하는가?
+        차량별로 세차 종류에따라 가격을 정해놓는다.
+
+
+    실사용을 가정한 테스트.
+        테스트용 데이터를 넣는다.
+            하나하나 집어넣기에는 가성비가 너무 떨어진다.
+        넣은 데이터를 이용해 이것저것 검색해 실제 사용시 문제가 없는지 확인한다.
+
+        
+        원하는 고객의 다음 입금안내 날짜
+            어제 세차를 했는가?
+                wash_plan - worker를 확인.
+            돈을 내야할 때인가?
+                payments - date를 확인해 마지막 입금일을 확인.
+                wash_plan - unpaid의 수를 확인.
+                customers - wash_cycle을 확인해 필요 unpaid의 false 수를 확인.
+                    확인한 false 수의 따라 입금문자를 보내는 날인지 아닌지 알 수 있다.
+                    false 숫자의 카운트는 사이클에 따라 다르다.
+
+            예를 들어보자.
+                일정 등록. 월 4회.
+                4개의 wash_plan이 등록된다.
+                돈을 받지 않았으니 schedule_type에 미납으로 표시된다.
+                돈을 받지 않았으니 pay_record에 입금정보가 없다.
+                    대신 회차정보가 들어간다. 1,2,3,4.
+
+                등록되어있는 마지막 wash_plan의 하루 뒤를 계산해 입금 예정일로 표시해준다.
+
+                만약 일정이 밀리면 모든 wash_plan이 밀리기에 문제 없다.
+
+                schedule_type이 없어도 되는가?
+                    
+                월별 회차정보를 어떻게 얻는가?
+                    payments에 입금정보가 들어있다.
+                    입금되면 payments에 정보 기록. 이후 pay_record에도 같은 정보가 들어간다.
+                        중복되는 정보는 필요 없다. payments를 적을 생각이니 pay_record를 회차정보 필드로 바꾸자.
+                    
+                미납인 차량의 경우
+                    schedule_type이 미납이다.
+                    회차정보 필드는 상관이 없다.
+
+                워시 스케쥴(개량판)
+                    무슨 차량인가? customers에서 가져오는 정보.
+                    돈을 냈는가? payments에서 가져오는 정보.
+                        언제 냈는지, 미납인지 아닌지를 알 수 있다.
+                    일정 날짜 - 언제 닦는가?
+                    세차 타입 - 내부? 외부? AS?
+                    몇 회차인가?
+                    작업한 사람은?
+                    작업자에게 얼마를 주는가?
+                
+                고객
+                    고객코드 - 고객을 구분한다.
+                    세차장 위치 - 어디서 닦는지?
+                    차량 번호
+                    주차 위치
+                    주차 층수
+                    전화번호
+                    세차 주기
+                    납부 방식
+                    메모
+
+
+
+        
+        
+        
+        원하는 고객의 다음 세차일
+            wash_plan에 세차일이 모두 적혀있을 것이다.
+            customers - wash_cycle을 확인해 세차주기를 확인.
+            wash_plan - 
+            stop_status - 고객이 세차를 중지했는지 확인한다.
+            연기했을 경우는 어떻게 하는가?
+
+        고객의 세차일정이 다 소화된 경우
+            wash_plan - wash_date를 확인해 세차일정이 다 소화되었는지 확인한다.
+            customers - wash_cycle을 확인해 세차주기를 확인한다.
+            stop_status - 고객이 세차를 중지했는지 확인한다.
+            wash_plan을 추가한다.
+
+        원하는 고객의 마지막 입금일
+            payments - date를 확인해 마지막 입금일을 확인한다.            
+
+        원하는 고객의 독촉현황
+            customers - push_pay를 확인해 독촉 여부를 확인한다.
+
+        원하는 고객의 마지막 세차일
+            wash_plan - worker
+            wash_plan - wash_date 두가지 데이터를 확인해 작업자가 확인되는 마지막 세차일정을 확인한다.
+
+        원하는 고객의 세차 중지상태
+            stop_status - stop, stop_temp를 확인해 세차 중지상태를 확인한다.
+            stop_status - date를 확인해 세차 중지일을 확인한다.
+            stop_status - reason을 확인해 세차 중지 사유를 확인한다.
+
+        원하는 직원의 7월간 닦은 차량의 수
+            wash_plan - date, worker를 확인해 7월간 닦은 차량의 수를 확인한다.
+            
+        원하는 직원의 이번달 월급
+            wash_plan - worker, wash_amount, last_pay_day를 확인해 이번달 월급을 확인한다.
+
+        원하는 직원의 세차장 별 작업 대수
+            customers - wash_location
+            wash_plan - worker 두가지 데이터를 확인해 지역별 작업자가 진행한 세차를 확인한다.
+
+        고객이 내야하는 금액
+            payments - amount를 확인해 고객이 내야하는 금액을 확인한다.
+
+        고객이 돈을 내지 않고 세차를 진행하면 
+            customers - push_pay가 오른다.
+            
+        고객이 세차를 진행했는데 서비스로 처리해야 한다면
+            wash_plan - pay_record를 진행한 세차일 기준으로 미루고 서비스 처리라고 적는다.
+
+        고객이 언제 낸 돈으로 세차가 진행되었고, 몇회차인지?
+            wash_plan - pay_record를 확인해 입금일 및 회차수를 확인한다.
+
+        직원이 새로 들어왔을 경우 마지막 입금일을 어떻게 할 것인가?
+            입사일로 대체한다.
+
+
+    
+    
+    
+    데이터 스키마 1
+        collection 이름 : customers
+        {id : '구분을 위한 키값',
+        wash_location : '세차장 위치',
+        car_number : '차량 번호',
+        car_type : '차량 종류',
+        parking_location : '입고 위치',
+        parking_time : '입고 시간',
+        wash_cycle : '세차 주기',
+        payment_method : '납부 방식',
+        phone_number : '전화번호',
+        car_memo : '',
+        memo : '메모',
+        group : '묶음차량',}
+
+        collection 이름 : wash_plan
+        {id : '구분을 위한 키값',
+        wash_date : '세차 날짜',
+        wash_type : '세차 종류',
+        unpaid : 'true/false',
+        payment_info : '지불 내역',
+        worker : '작업자',
+        wash_amount : '직원에게 지급할 액수',}
+
+        collection 이름 : payments
+        {id : '입금 고객을 구분하기 위한 키값',
+        date : '입금 날짜',
+        amount : '입금 액수',
+        name : '입금자명',}
+
+        collection 이름 : unknown_payments
+        {date : '입금 날짜',
+        amount : '입금 액수',
+        name : '입금자명',}
+
+        collection 이름 : staff
+        {staff_id : '직원 구분을 위한 키값',
+        name : '직원 이름',
+        phone_number : '직원 전화번호',
+        location : '담당위치'
+        date_joined : '입사일',
+        level_1 : '1레벨 날짜',
+        level_2 : '2레벨 날짜',
+        level_3 : '3레벨 날짜',}
+
+        collection 이름 : memos
+        {memo_id : '메모 구분을 위한 키값',
+        memo : '메모 내용'}
+
+    
+    
+    데이터 스키마2
+        collection 이름: customers
+        { 'id': '고객코드', 'wash_location': '세차장 위치', 'car_number': '차량 번호', 'car_type': '차량 종류', 'parking_location': '입고 위치', 'parking_time': '입고 시간', 'wash_cycle': '세차 주기', 'pay_method': '납부 방식', 'P_number': '전화번호', 'car_memo': '', 'memo': '메모', 'group': '묶음차량', 'push_pay': '독촉' }
+
+        collection 이름: wash_plan
+        { 'id': '고객코드', 'pay_info':'지불정보', 'wash_date':'세차 진행일', 'wash_type':'세차 종류', 'schedule_type': '시술 대체', 'worker': '작업자', 'wash_amount': '직원에게 지급할 액수', 'schedule': '회차수'}
+
+        collection 이름: stop_status
+        { 'id': '고객코드', 'stop': 'true', 'stop_temp': 'true', 'stop_date': '중지날짜', 'clear_date': '재시작 날짜', 'reason': '이유' }
+
+        collection 이름: payments
+        { 'id': '고객코드', 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명', 'pay_method': '납부 방식' }
+
+        collection 이름: unknown_payments
+        { 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명', 'pay_method': '납부 방식'}
+
+        collection 이름: staff
+        { 'staff_id': '직원 구분을 위한 키값', 'name': '직원 이름', 'phone_number': '직원 전화번호', 'location': '담당위치', 'date_joined': '입사일', 'level_1': '1레벨 날짜', 'level_2': '2레벨 날짜', 'level_3': '3레벨 날짜', 'last_pay_day': '마지막 급여 지급일' }
+
+        collection 이름: memos
+        { 'memo_id': '메모 구분을 위한 키값', 'memo': '메모 내용' }
+
+    데이터 스키마 3
+        collection 이름: customers
+        { 'id': '구분을 위한 키값', 'wash_location': '세차장 위치', 'car_number': '차량 번호', 'car_type': '차량 종류', 'parking_location': '입고 위치', 'parking_time': '입고 시간', 'wash_cycle': '세차 주기', 'payment_method': '납부 방식', 'phone_number': '전화번호', 'car_memo': '', 'memo': '메모', 'group': '묶음차량' }
+
+        collection 이름: wash_plan
+        { 'id': '구분을 위한 키값', 'wash_date': '세차 날짜', 'wash_type': '세차 종류(외부?내부)', 'unpaid': 'true/false', 'payment_info': '지불 내역', 'worker': '작업자', 'wash_amount': '직원에게 지급할 액수' }
+
+        collection 이름: stop_status
+        { 'id': '구분을 위한 키값', 'stop': 'true' 'stop_temp': 'true', 'stop_date': '', 'date': '', 'reason': '' }
+
+        collection 이름: payments
+        { 'id': '입금 고객을 구분하기 위한 키값', 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명' 'schedule'}
+
+        collection 이름: unknown_payments
+        { 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명' }
+
+        collection 이름: staff
+        { 'staff_id': '직원 구분을 위한 키값', 'name': '직원 이름', 'phone_number': '직원 전화번호', 'location': '담당위치', 'date_joined': '입사일', 'level_1': '1레벨 날짜', 'level_2': '2레벨 날짜', 'level_3': '3레벨 날짜' }
+
+        collection 이름: memos
+        { 'memo_id': '메모 구분을 위한 키값', 'memo': '메모 내용' }
+
+
+
+
