@@ -27,18 +27,32 @@ database["customers"].insert_many([
     { 'id': '20', 'wash_location': '힐스', 'car_number': '7777', 'car_type': '큰검볼', 'parking_location': '2406 1층', 'parking_time': '8시', 'wash_cycle': '', 'payment_method': '격주', 'phone_number': '010-0000-0000', 'car_memo': '', 'memo': '', 'group': '' },
     { 'id': '21', 'wash_location': '힐스', 'car_number': '5555', 'car_type': '검큰비', 'parking_location': '2401 2층', 'parking_time': '8시', 'wash_cycle': '', 'payment_method': '매주', 'phone_number': '010-0000-0000', 'car_memo': '', 'memo': '', 'group': '' },
 ])
-# database["wash_schedule"].insert_one(
-# { 'id': '구분을 위한 키값', 'wash_date': '세차 날짜', 'wash_type': '세차 종류', 'unpaid': 'true/false', 'payment_info': '지불 내역', 'worker': '작업자', 'wash_amount': '직원에게 지급할 액수' }
-# )
-# database["payments"].insert_one(
-# { 'id': '입금 고객을 구분하기 위한 키값', 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명' }
-# )
-# database["unknown_payments"].insert_one(
-# { 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명' }
-# )
-# database["staff"].insert_one(
-# { 'staff_id': '직원 구분을 위한 키값', 'name': '직원 이름', 'phone_number': '직원 전화번호', 'location': '담당위치', 'date_joined': '입사일', 'level_1': '1레벨 날짜', 'level_2': '2레벨 날짜', 'level_3': '3레벨 날짜' }
-# )
-# database["memos"].insert_one(
-# { 'memo_id': '메모 구분을 위한 키값', 'memo': '메모 내용' }
-# )
+database["wash_schedule"].insert_one(
+{ 'id': '구분을 위한 키값', 'wash_date': '세차 날짜', 'wash_type': '세차 종류', 'unpaid': 'true/false', 'payment_info': '지불 내역', 'worker': '작업자', 'wash_amount': '직원에게 지급할 액수' }
+)
+database["payments"].insert_one(
+{ 'id': '입금 고객을 구분하기 위한 키값', 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명' }
+)
+database["unknown_payments"].insert_one(
+{ 'date': '입금 날짜', 'amount': '입금 액수', 'name': '입금자명' }
+)
+database["staff"].insert_one(
+{ 'staff_id': '직원 구분을 위한 키값', 'name': '직원 이름', 'phone_number': '직원 전화번호', 'location': '담당위치', 'date_joined': '입사일', 'level_1': '1레벨 날짜', 'level_2': '2레벨 날짜', 'level_3': '3레벨 날짜' }
+)
+database["memos"].insert_one(
+{ 'memo_id': '메모 구분을 위한 키값', 'memo': '메모 내용' }
+)
+
+
+from pymongo import MongoClient
+
+# 1. MongoDB 연결
+client = MongoClient("localhost", 27017)
+db = client["test_db"]
+
+# 2. 데이터 전체 조회
+for doc in collection.find():
+    print(doc)
+
+# for doc in collection.find({"car_type": "파비엠"}):
+#     print(doc)
