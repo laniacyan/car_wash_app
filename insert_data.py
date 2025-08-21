@@ -3,7 +3,7 @@
 # 2. 데이터를 랜덤하게 생성한다.
 # 3. 입력받은 숫자만큼 랜덤한 데이터를 생성해 넣는다.
 
-# 문제점 1. 2번 데이터를 넣으면 id가 중복된다.
+# 문제점1. 2번 데이터를 넣으면 id가 중복된다.
 
 # 완성품 1
     # from pymongo import MongoClient
@@ -209,7 +209,7 @@ def find_id(collection):
 def check_collection():
     collection_map = {'고객정보': 'customers', '세차일정': 'wash_schedule', '입금내역': 'payments', '입금고객': 'unknown_payments', '직원정보': 'staff', '메모': 'memo'}
     while True:
-        collection_name = input("어떤 정보를 확인하시겠습니까? (고객정보, 세차일정, 입금내역, 입금고객, 직원정보, 메모) \n")
+        collection_name = input("어떤 정보를 추가하시겠습니까? (고객정보, 세차일정, 입금내역, 입금고객, 직원정보, 메모) \n")
         if collection_name in collection_map:
             print(collection_map[collection_name])
             return collection_map[collection_name]

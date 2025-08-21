@@ -4,19 +4,7 @@
 # 3. 검색할 값을 입력한다.
 # 4. 입력된 값에 알맞은 데이터를 보여준다.
 
-
-from pymongo import MongoClient
-
-# 1. MongoDB 연결
-client = MongoClient("localhost", 27017)
-db = client["test_db"]
-
-# 2. 데이터 전체 조회
-# for doc in collection.find():
-#     print(doc)
-
-# for doc in collection.find({"car_type": "파비엠"}):
-#     print(doc)
+# 문제점1. wash_schedule의 unpaid가 검색되지 않는다.(bool타입으로 저장된게 문제같다.)
 
 
 # 정보 확인
@@ -140,7 +128,7 @@ def check_datas():
                         print("없는 필드입니다.")
                     
                 elif user_input == '3':
-                    answer = input("어떻게 검색하시겠습니까? \n\n 1. 입력값 중 하나라도 일치 \n 2. 입력값 모두 일치 3. 돌아간다 \n")
+                    answer = input("어떻게 검색하시겠습니까? \n\n 1. 입력값 중 하나라도 일치 \n 2. 입력값 모두 일치 \n 3. 돌아간다 \n")
                     if answer == '1':
                         # 입력한 값이 들어간 모든 데이터를 검색
                         search_field_data1(users_field, collection)
