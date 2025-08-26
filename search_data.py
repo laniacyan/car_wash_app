@@ -6,6 +6,10 @@
 
 # 문제점1. wash_schedule의 unpaid가 검색되지 않는다.(bool타입으로 저장된게 문제같다.)
 
+from pymongo import MongoClient
+
+client = MongoClient("localhost", 27017)
+db = client["test_db"]
 
 # 정보 확인
 def check_collection():
@@ -102,7 +106,7 @@ def check_datas():
         elif data_type == '직접 입력':
             value = input("검색: ")
             for field in field_list:
-                for doc in db[collection].find({field: value}):
+                for doc in db[collection].find({field: str(value)}):
                     print(doc)
                     
             print('검색 결과 출력 완료')

@@ -51,8 +51,59 @@ client = MongoClient("localhost", 27017)
 db = client["test_db"]
 
 # 2. 데이터 전체 조회
-for doc in collection.find():
-    print(doc)
-
-# for doc in collection.find({"car_type": "파비엠"}):
+# for doc in collection.find():
 #     print(doc)
+
+# for doc in collection.find({"ㅊㅁㄱ": "파비엠"}):
+#     print(doc)
+
+# def search_by_car_number(car_number):
+#     coll_type = 'customers'
+#     field_type = 'car_number'
+    
+#     db_query = {'fleld_type': car_number}
+#     for doc in collection.find(db_query)
+#         return doc
+    
+# def search_by_field(field, value):
+#     db = client["test_db"]
+#     for doc in db.collection.find({field: value}):
+#         print(doc)
+
+# def test_search_by_car_number():
+#     for num in ['2001', '3001', '4501']:
+#         result = search_by_car_number(num)
+        
+#         print(result)
+
+def search_all(coll_type, field_type, value):
+    db = client["test_db"]
+    collection = db[coll_type]
+    
+    db_query = {field_type: value}
+    for doc in collection.find(db_query):
+        print(doc)
+
+def test_search_by_car_number():
+    db = client["test_db"]
+    collection = db["customers"]
+    db_field = 'car_number'
+    
+    for num in ['2001', '3001', '4501']:
+        for doc in collection.find({db_field: num}):
+            print(doc)
+            
+test_search_by_car_number()
+test_search_all()
+
+def test_search_all():
+    search_all('customers', 'car_number', '2001')
+    search_all('customers', 'car_type', '검볼보')
+    search_all('customers', 'parking_location', '1301 1층')
+    search_all('customers', 'payment_method', '격주')
+    search_all('customers', 'phone_number', '010-1234-1234')
+    search_all('customers', 'group', '4')
+    search_all('wash_schedule', 'worker', '작업자')
+    search_all('payments', 'name', '입금자명')
+    search_all('staff', 'name', '직원 이름')
+    search_all('memos', 'memo', '메모 내용')
