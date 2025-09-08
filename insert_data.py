@@ -84,6 +84,8 @@
     # 메모 미구현상태
 from pymongo import MongoClient
 import random
+from datetime import datetime, timedelta
+
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['test_db']
@@ -104,7 +106,7 @@ def generate_customer_data(id):
     phone_number2 = random.randint(1000, 9999)
 
     return {
-        'id': id,
+        '_id': id,
         'wash_location': wash_location,
         'car_number': car_number,
         'car_type': car_type,
@@ -120,11 +122,13 @@ def generate_customer_data(id):
     }
 
 def generate_wash_schedule_data(id):
-    wash_date = random.choice(['2023-08-01', '2023-08-02', '2023-08-03'])
+    # wash_date = random.choice(['2023-08-01', '2023-08-02', '2023-08-03'])
+    wash_date = random_yeardate(id)
     wash_type = random.choice(['외부', '내부', '내외부', 'AS세차', '간편세차'])
     unpaid = random.choice([True, False])
     worker = random.choice(['직원1', '직원2', '직원3'])
     wash_amount = random.choice(['5000', '6000', '7000'])
+    wash = random.choice(['True', 'False'])
 
     return {
         'id': id,
@@ -133,7 +137,8 @@ def generate_wash_schedule_data(id):
         'unpaid': unpaid,
         'payment_info': '',
         'worker': worker,
-        'wash_amount': wash_amount
+        'wash_amount': wash_amount,
+        'wash': wash
     }
 
 def generate_payments_data(id):
@@ -147,14 +152,13 @@ def generate_payments_data(id):
         'amount': amount,
         'name': name
     }
-    
+
 def generate_unknown_payment_data(id):
     date = random.choice(['2023-08-01', '2023-08-02', '2023-08-03'])
     amount = random.choice(['45000', '25000', '75000'])
     name = random.choice(['고객4', '고객5', '고객6'])
 
     return {
-        'id': id,
         'date': date,
         'amount': amount,
         'name': name
@@ -170,7 +174,6 @@ def generate_staff_data(id):
     level_3 = random.choice(['2020-01-01', '2020-02-01', '2020-03-01'])
 
     return {
-        'staff_id': id,
         'name': name,
         'phone_number': phone,
         'location': location,
@@ -180,9 +183,8 @@ def generate_staff_data(id):
         'level_3': level_3
     }
 
-def generate_memo_data(id):
+def generate_memo_data():
     return {
-        'memo_id': id,
         'memo': '메모 내용'
     }
 
@@ -196,14 +198,25 @@ def input_num():
         except ValueError:
             print("유효한 숫자를 입력해 주세요.")
 
-# 콜렉션에서 id를 이용해 검색한다.
-def find_id(collection):
+# 콜렉션에서 비어있는 id를 찾는다.
+def check_id(collection):
     i = 0
     while True:
         doc = db[collection].find_one({"id": i})
         if doc is None:
             return i
         i = i + 1
+
+# 고객id를 랜덤하게 정해 지정해준다.
+def find_id():
+    collection = db["customers"]
+    list_id = []
+    for doc in collection.find():
+        list_id.append(doc.get("id"))
+    # print("list_id : ", list_id)
+    id = random.choice(list_id)
+
+    return id
 
 # 정보 확인
 def check_collection():
@@ -215,6 +228,46 @@ def check_collection():
             return collection_map[collection_name]
         print("유효하지 않은 선택입니다.")
 
+
+# 중복 날짜 찾기
+def check_dupes(date, id):
+    collection = db["wash_schedule"]
+    for doc in collection.find({'id': id}):
+        if doc.get('wash_date') == date:
+            return 1
+        
+    return 0
+
+# 랜덤한 날짜 구하기
+def random_yeardate(id):
+    # 시작 날짜와 종료 날짜 설정 (원하는 범위 내에서 날짜를 생성할 수 있도록)
+    start_date = datetime(2025, 1, 1)
+    end_date = datetime(2025, 12, 31)
+
+    # 시작 날짜와 종료 날짜 사이에서 랜덤한 날짜 생성
+    while True:
+        i = 0
+        random_day = random.randint(0, (end_date - start_date).days)
+        random_date = start_date + timedelta(days=random_day)
+        # 두 조건 다 만족하는 경우 break
+        if random_date.weekday() not in [4, 5]:  # 4: Friday, 5: Saturday
+            date = random_date.strftime("%Y-%m-%d")
+            check = check_dupes(date, id)
+            if check == 0:
+                break
+
+        i += 1
+        if i == 100:
+            print('100번 반복함')
+            break
+
+
+    
+    # return random_date.strftime("%Y년 %m월 %d일")
+    return date
+
+
+
 # 데이터 삽입
 def insert_data():
     # 넣을 데이터 종류를 구한다.
@@ -223,7 +276,7 @@ def insert_data():
     num = input_num()
     for i in range(num):
         if collection == 'customers':
-            id = find_id(collection)
+            id = check_id(collection)
             # 랜덤 데이터 생성
             data = generate_customer_data(id)
             
@@ -232,7 +285,7 @@ def insert_data():
             print(f"Inserted customer data: {data}")
             
         elif collection == 'wash_schedule':
-            id = find_id(collection)
+            id = find_id()
             # 랜덤 데이터 생성
             data = generate_wash_schedule_data(id)
             
@@ -241,7 +294,7 @@ def insert_data():
             print(f"Inserted wash schedule data: {data}")
         
         elif collection == 'payments':
-            id = find_id(collection)
+            id = find_id()
             # 랜덤 데이터 생성
             data = generate_payments_data(id)
 
@@ -250,7 +303,7 @@ def insert_data():
             print(f"Inserted payments data: {data}")
 
         elif collection == 'unknown_payments':
-            id = find_id(collection)
+            id = find_id()
             # 랜덤 데이터 생성
             data = generate_unknown_payment_data(id)
 
@@ -259,7 +312,8 @@ def insert_data():
             print(f"Inserted unknown payments data: {data}")
 
         elif collection == 'staff':
-            id = find_id(collection)
+            id = check_id(collection)
+            
             # 랜덤 데이터 생성
             data = generate_staff_data(id)
 
@@ -270,7 +324,6 @@ def insert_data():
     return 0
 
 insert_data()
-
 
 
 

@@ -15,11 +15,11 @@ except Exception as e:
 
 
 
-conn_default = MongoClient()
+# conn_default = MongoClient()
 
-print(conn_default)
+# print(conn_default)
 
-MongoClient(host='localhost', port=27017, document_class=dict, tz_aware=False, connect=True)
+# MongoClient(host='localhost', port=27017, document_class=dict, tz_aware=False, connect=True)
 
 
 
